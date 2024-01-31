@@ -617,12 +617,11 @@ class App(Scaffold):
         if endpoint is None:
             endpoint = _endpoint_from_view_func(view_func)  # type: ignore
         options["endpoint"] = endpoint
-        methods = options.pop("methods", None)
 
         # if the methods are not given and the view_func object knows its
         # methods we can use that instead.  If neither exists, we go with
         # a tuple of only ``GET`` as default.
-        if methods is None:
+        if (methods := options.pop("methods", None)) is None:
             methods = getattr(view_func, "methods", None) or ("GET",)
         if isinstance(methods, str):
             raise TypeError(
@@ -843,9 +842,8 @@ class App(Scaffold):
                     continue
 
                 for cls in exc_class.__mro__:
-                    handler = handler_map.get(cls)
 
-                    if handler is not None:
+                    if (handler := handler_map.get(cls)) is not None:
                         return handler
         return None
 

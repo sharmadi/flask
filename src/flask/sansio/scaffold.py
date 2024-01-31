@@ -723,9 +723,8 @@ def _find_package_path(import_name: str) -> str:
     root_mod_name, _, _ = import_name.partition(".")
 
     try:
-        root_spec = importlib.util.find_spec(root_mod_name)
 
-        if root_spec is None:
+        if (root_spec := importlib.util.find_spec(root_mod_name)) is None:
             raise ValueError("not found")
     except (ImportError, ValueError):
         # ImportError: the machinery told us it does not exist

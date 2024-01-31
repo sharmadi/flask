@@ -600,9 +600,8 @@ class FlaskGroup(AppGroup):
         self._load_plugin_commands()
         # Look up built-in and plugin commands, which should be
         # available even if the app fails to load.
-        rv = super().get_command(ctx, name)
 
-        if rv is not None:
+        if (rv := super().get_command(ctx, name)) is not None:
             return rv
 
         info = ctx.ensure_object(ScriptInfo)
@@ -787,9 +786,8 @@ class CertParamType(click.ParamType):
         try:
             return self.path_type(value, param, ctx)
         except click.BadParameter:
-            value = click.STRING(value, param, ctx).lower()
 
-            if value == "adhoc":
+            if (value := click.STRING(value, param, ctx).lower()) == "adhoc":
                 try:
                     import cryptography  # noqa: F401
                 except ImportError:
@@ -1009,9 +1007,8 @@ def shell_command() -> None:
     # Site, customize, or startup script can set a hook to call when
     # entering interactive mode. The default one sets up readline with
     # tab and history completion.
-    interactive_hook = getattr(sys, "__interactivehook__", None)
 
-    if interactive_hook is not None:
+    if (interactive_hook := getattr(sys, "__interactivehook__", None)) is not None:
         try:
             import readline
             from rlcompleter import Completer

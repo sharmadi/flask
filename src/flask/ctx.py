@@ -108,8 +108,7 @@ class _AppCtxGlobals:
         return iter(self.__dict__)
 
     def __repr__(self) -> str:
-        ctx = _cv_app.get(None)
-        if ctx is not None:
+        if (ctx := _cv_app.get(None)) is not None:
             return f"<flask.g of '{ctx.app.name}'>"
         return object.__repr__(self)
 
@@ -137,9 +136,8 @@ def after_this_request(
 
     .. versionadded:: 0.9
     """
-    ctx = _cv_request.get(None)
 
-    if ctx is None:
+    if (ctx := _cv_request.get(None)) is None:
         raise RuntimeError(
             "'after_this_request' can only be used when a request"
             " context is active, such as in a view function."
@@ -176,9 +174,8 @@ def copy_current_request_context(f: F) -> F:
 
     .. versionadded:: 0.10
     """
-    ctx = _cv_request.get(None)
 
-    if ctx is None:
+    if (ctx := _cv_request.get(None)) is None:
         raise RuntimeError(
             "'copy_current_request_context' can only be used when a"
             " request context is active, such as in a view function."

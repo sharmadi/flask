@@ -277,9 +277,8 @@ class Flask(App):
 
         .. versionadded:: 0.9
         """
-        value = current_app.config["SEND_FILE_MAX_AGE_DEFAULT"]
 
-        if value is None:
+        if (value := current_app.config["SEND_FILE_MAX_AGE_DEFAULT"]) is None:
             return None
 
         if isinstance(value, timedelta):
@@ -670,8 +669,7 @@ class Flask(App):
            Added `**kwargs` to support passing additional keyword arguments to
            the constructor of :attr:`test_client_class`.
         """
-        cls = self.test_client_class
-        if cls is None:
+        if (cls := self.test_client_class) is None:
             from .testing import FlaskClient as cls
         return cls(  # type: ignore
             self, self.response_class, use_cookies=use_cookies, **kwargs
@@ -687,9 +685,8 @@ class Flask(App):
 
         .. versionadded:: 1.0
         """
-        cls = self.test_cli_runner_class
 
-        if cls is None:
+        if (cls := self.test_cli_runner_class) is None:
             from .testing import FlaskCliRunner as cls
 
         return cls(self, **kwargs)  # type: ignore
@@ -724,8 +721,7 @@ class Flask(App):
         if isinstance(e, RoutingException):
             return e
 
-        handler = self._find_error_handler(e, request.blueprints)
-        if handler is None:
+        if (handler := self._find_error_handler(e, request.blueprints)) is None:
             return e
         return self.ensure_sync(handler)(e)  # type: ignore[no-any-return]
 
@@ -754,9 +750,8 @@ class Flask(App):
         if isinstance(e, HTTPException) and not self.trap_http_exception(e):
             return self.handle_http_exception(e)
 
-        handler = self._find_error_handler(e, request.blueprints)
 
-        if handler is None:
+        if (handler := self._find_error_handler(e, request.blueprints)) is None:
             raise
 
         return self.ensure_sync(handler)(e)  # type: ignore[no-any-return]
@@ -791,9 +786,8 @@ class Flask(App):
         """
         exc_info = sys.exc_info()
         got_request_exception.send(self, _async_wrapper=self.ensure_sync, exception=e)
-        propagate = self.config["PROPAGATE_EXCEPTIONS"]
 
-        if propagate is None:
+        if (propagate := self.config["PROPAGATE_EXCEPTIONS"]) is None:
             propagate = self.testing or self.debug
 
         if propagate:
@@ -807,9 +801,8 @@ class Flask(App):
         self.log_exception(exc_info)
         server_error: InternalServerError | ft.ResponseReturnValue
         server_error = InternalServerError(original_exception=e)
-        handler = self._find_error_handler(server_error, request.blueprints)
 
-        if handler is not None:
+        if (handler := self._find_error_handler(server_error, request.blueprints)) is not None:
             server_error = self.ensure_sync(handler)(server_error)
 
         return self.finalize_request(server_error, from_error_handler=True)
@@ -865,8 +858,7 @@ class Flask(App):
 
         try:
             request_started.send(self, _async_wrapper=self.ensure_sync)
-            rv = self.preprocess_request()
-            if rv is None:
+            if (rv := self.preprocess_request()) is None:
                 rv = self.dispatch_request()
         except Exception as e:
             rv = self.handle_user_exception(e)
@@ -1010,9 +1002,8 @@ class Flask(App):
         .. versionadded:: 2.2
             Moved from ``flask.url_for``, which calls this method.
         """
-        req_ctx = _cv_request.get(None)
 
-        if req_ctx is not None:
+        if (req_ctx := _cv_request.get(None)) is not None:
             url_adapter = req_ctx.url_adapter
             blueprint_name = req_ctx.request.blueprint
 
@@ -1029,12 +1020,11 @@ class Flask(App):
             if _external is None:
                 _external = _scheme is not None
         else:
-            app_ctx = _cv_app.get(None)
 
             # If called by helpers.url_for, an app context is active,
             # use its url_adapter. Otherwise, app.url_for was called
             # directly, build an adapter.
-            if app_ctx is not None:
+            if (app_ctx := _cv_app.get(None)) is not None:
                 url_adapter = app_ctx.url_adapter
             else:
                 url_adapter = self.create_url_adapter(None)

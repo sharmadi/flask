@@ -272,9 +272,8 @@ class TaggedJSONSerializer:
             not true.
         """
         tag = tag_class(self)
-        key = tag.key
 
-        if key:
+        if key := tag.key:
             if not force and key in self.tags:
                 raise KeyError(f"Tag '{key}' is already registered.")
 

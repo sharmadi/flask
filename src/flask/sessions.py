@@ -310,8 +310,7 @@ class SecureCookieSessionInterface(SessionInterface):
         )
 
     def open_session(self, app: Flask, request: Request) -> SecureCookieSession | None:
-        s = self.get_signing_serializer(app)
-        if s is None:
+        if (s := self.get_signing_serializer(app)) is None:
             return None
         val = request.cookies.get(self.get_cookie_name(app))
         if not val:

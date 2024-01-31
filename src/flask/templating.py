@@ -99,24 +99,20 @@ class DispatchingJinjaLoader(BaseLoader):
         raise TemplateNotFound(template)
 
     def _iter_loaders(self, template: str) -> t.Iterator[tuple[Scaffold, BaseLoader]]:
-        loader = self.app.jinja_loader
-        if loader is not None:
+        if (loader := self.app.jinja_loader) is not None:
             yield self.app, loader
 
         for blueprint in self.app.iter_blueprints():
-            loader = blueprint.jinja_loader
-            if loader is not None:
+            if (loader := blueprint.jinja_loader) is not None:
                 yield blueprint, loader
 
     def list_templates(self) -> list[str]:
         result = set()
-        loader = self.app.jinja_loader
-        if loader is not None:
+        if (loader := self.app.jinja_loader) is not None:
             result.update(loader.list_templates())
 
         for blueprint in self.app.iter_blueprints():
-            loader = blueprint.jinja_loader
-            if loader is not None:
+            if (loader := blueprint.jinja_loader) is not None:
                 for template in loader.list_templates():
                     result.add(template)
 

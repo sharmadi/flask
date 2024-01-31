@@ -31,9 +31,8 @@ class Blueprint(SansioBlueprint):
 
         .. versionadded:: 0.9
         """
-        value = current_app.config["SEND_FILE_MAX_AGE_DEFAULT"]
 
-        if value is None:
+        if (value := current_app.config["SEND_FILE_MAX_AGE_DEFAULT"]) is None:
             return None
 
         if isinstance(value, timedelta):

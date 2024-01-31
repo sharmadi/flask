@@ -61,16 +61,14 @@ class BlueprintSetupState:
         #: out if the blueprint was registered in the past already.
         self.first_registration = first_registration
 
-        subdomain = self.options.get("subdomain")
-        if subdomain is None:
+        if (subdomain := self.options.get("subdomain")) is None:
             subdomain = self.blueprint.subdomain
 
         #: The subdomain that the blueprint should be active for, ``None``
         #: otherwise.
         self.subdomain = subdomain
 
-        url_prefix = self.options.get("url_prefix")
-        if url_prefix is None:
+        if (url_prefix := self.options.get("url_prefix")) is None:
             url_prefix = self.blueprint.url_prefix
         #: The prefix that should be used for all URLs defined on the
         #: blueprint.
@@ -349,9 +347,8 @@ class Blueprint(Scaffold):
         for blueprint, bp_options in self._blueprints:
             bp_options = bp_options.copy()
             bp_url_prefix = bp_options.get("url_prefix")
-            bp_subdomain = bp_options.get("subdomain")
 
-            if bp_subdomain is None:
+            if (bp_subdomain := bp_options.get("subdomain")) is None:
                 bp_subdomain = blueprint.subdomain
 
             if state.subdomain is not None and bp_subdomain is not None:

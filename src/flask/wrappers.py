@@ -104,9 +104,8 @@ class Request(RequestBase):
 
         .. versionadded:: 2.0.1
         """
-        name = self.blueprint
 
-        if name is None:
+        if (name := self.blueprint) is None:
             return []
 
         return _split_blueprint_path(name)

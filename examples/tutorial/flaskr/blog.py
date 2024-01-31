@@ -37,7 +37,8 @@ def get_post(id, check_author=True):
     :raise 404: if a post with the given id doesn't exist
     :raise 403: if the current user isn't the author
     """
-    post = (
+
+    if (post := (
         get_db()
         .execute(
             "SELECT p.id, title, body, created, author_id, username"
@@ -46,9 +47,7 @@ def get_post(id, check_author=True):
             (id,),
         )
         .fetchone()
-    )
-
-    if post is None:
+    )) is None:
         abort(404, f"Post id {id} doesn't exist.")
 
     if check_author and post["author_id"] != g.user["id"]:
