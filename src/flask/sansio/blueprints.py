@@ -310,7 +310,7 @@ class Blueprint(Scaffold):
             raise ValueError(
                 f"The name '{self_name}' is already registered for"
                 f" {bp_desc} blueprint{existing_at}. Use 'name=' to"
-                f" provide a unique name."
+                " provide a unique name."
             )
 
         first_bp_registration = not any(bp is self for bp in app.blueprints.values())
